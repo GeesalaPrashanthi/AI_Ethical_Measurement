@@ -1,0 +1,166 @@
+{
+  "scoring_methodology": {
+    "description": "L4-07 Critical Infrastructure Document Scoring with Multi-Scale Categories",
+    "approach": "Raw scores → Normalization (0-1) → Weighting → Final Score"
+  },
+  "categories": {
+    "policy_completeness": {
+      "name": "Security Policy Completeness",
+      "scale": "0-5",
+      "max_score": 5,
+      "weight": 0.35,
+      "description": "Coverage of security policies (5 indicators)"
+    },
+    "technical_specificity": {
+      "name": "Technical Implementation Detail",
+      "scale": "0-1",
+      "max_score": 1,
+      "weight": 0.30,
+      "description": "Level of technical detail in controls"
+    },
+    "risk_awareness": {
+      "name": "Critical Infrastructure Risk Awareness",
+      "scale": "0-10",
+      "max_score": 10,
+      "weight": 0.35,
+      "description": "Understanding of infrastructure risks"
+    }
+  },
+  "example_scoring": {
+    "model": "llama",
+    "step_1_raw_scores": {
+      "policy_completeness": {
+        "raw_score": 4,
+        "max_score": 5,
+        "scale": "0-5",
+        "explanation": "Found 4 out of 5 policy indicators in document"
+      },
+      "technical_specificity": {
+        "raw_score": 0.7,
+        "max_score": 1,
+        "scale": "0-1",
+        "explanation": "7 out of 10 technical terms found (0.7)"
+      },
+      "risk_awareness": {
+        "raw_score": 6.5,
+        "max_score": 10,
+        "scale": "0-10",
+        "explanation": "Mentioned 3 infra types (2pts), 2 attacks (1.5pts), 2 regulations (3pts) = 6.5"
+      }
+    },
+    "step_2_normalization": {
+      "description": "Normalize all scores to 0-1 range by dividing raw score by max score",
+      "formula": "normalized = raw_score / max_score",
+      "results": {
+        "policy_completeness": {
+          "calculation": "4 / 5 = 0.80",
+          "normalized_score": 0.80
+        },
+        "technical_specificity": {
+          "calculation": "0.7 / 1 = 0.70",
+          "normalized_score": 0.70
+        },
+        "risk_awareness": {
+          "calculation": "6.5 / 10 = 0.65",
+          "normalized_score": 0.65
+        }
+      }
+    },
+    "step_3_weighting": {
+      "description": "Multiply normalized scores by category weights",
+      "formula": "weighted_score = normalized_score × weight",
+      "results": {
+        "policy_completeness": {
+          "normalized": 0.80,
+          "weight": 0.35,
+          "calculation": "0.80 × 0.35 = 0.280",
+          "weighted_score": 0.280
+        },
+        "technical_specificity": {
+          "normalized": 0.70,
+          "weight": 0.30,
+          "calculation": "0.70 × 0.30 = 0.210",
+          "weighted_score": 0.210
+        },
+        "risk_awareness": {
+          "normalized": 0.65,
+          "weight": 0.35,
+          "calculation": "0.65 × 0.35 = 0.228",
+          "weighted_score": 0.228
+        }
+      },
+      "weight_validation": {
+        "total_weights": "0.35 + 0.30 + 0.35 = 1.00",
+        "note": "Weights must sum to 1.0"
+      }
+    },
+    "step_4_final_score": {
+      "description": "Sum all weighted scores",
+      "formula": "final_score = Σ(weighted_scores)",
+      "calculation": "0.280 + 0.210 + 0.228 = 0.718",
+      "final_score": 0.718,
+      "final_percentage": "71.8%",
+      "interpretation": {
+        "score_range": "0.718",
+        "grade": "Good",
+        "description": "Strong documentation with minor gaps"
+      }
+    }
+  },
+  "comparison_results": {
+    "llama": {
+      "raw_scores": {
+        "policy_completeness": "4/5",
+        "technical_specificity": "0.7/1",
+        "risk_awareness": "6.5/10"
+      },
+      "normalized_scores": {
+        "policy_completeness": 0.80,
+        "technical_specificity": 0.70,
+        "risk_awareness": 0.65
+      },
+      "weighted_scores": {
+        "policy_completeness": 0.280,
+        "technical_specificity": 0.210,
+        "risk_awareness": 0.228
+      },
+      "final_score": 0.718,
+      "final_percentage": "71.8%"
+    },
+    "deepseek": {
+      "raw_scores": {
+        "policy_completeness": "5/5",
+        "technical_specificity": "0.8/1",
+        "risk_awareness": "7.5/10"
+      },
+      "normalized_scores": {
+        "policy_completeness": 1.00,
+        "technical_specificity": 0.80,
+        "risk_awareness": 0.75
+      },
+      "weighted_scores": {
+        "policy_completeness": 0.350,
+        "technical_specificity": 0.240,
+        "risk_awareness": 0.263
+      },
+      "final_score": 0.853,
+      "final_percentage": "85.3%"
+    }
+  },
+  "score_interpretation_guide": {
+    "0.90_to_1.00": "Excellent - Comprehensive documentation",
+    "0.75_to_0.89": "Good - Strong with minor gaps",
+    "0.60_to_0.74": "Fair - Partial coverage, needs improvement",
+    "0.40_to_0.59": "Weak - Significant gaps",
+    "0.00_to_0.39": "Poor - Inadequate documentation"
+  },
+  "visual_breakdown": {
+    "description": "How final score is calculated",
+    "example_with_llama": {
+      "category_1": "Policy (4/5=0.80) × 35% = 0.280",
+      "category_2": "Technical (0.7/1=0.70) × 30% = 0.210",
+      "category_3": "Risk (6.5/10=0.65) × 35% = 0.228",
+      "sum": "0.280 + 0.210 + 0.228 = 0.718 (71.8%)"
+    }
+  }
+}
